@@ -154,13 +154,11 @@ struct ContentView: View {
 
     func loadVideo()
     {
-        if (videoURL == nil)
-        {
+        guard let urlString = videoURL, let url = URL(string: urlString) else {
             player = nil
             return
         }
-        
-        guard let url = URL(string: videoURL!) else { return }
+
         player = AVPlayer(url: url)
     }
 }
