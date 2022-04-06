@@ -23,7 +23,7 @@ struct ContentView: View {
     // Facebook
     func onShareToFBImageAsStickerClick() {
         let stickerImage = UIImage(named: "Image")?.pngData();
-        let appID = "247047359503";
+        let appID = "YOUR_APP_ID";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
@@ -37,8 +37,8 @@ struct ContentView: View {
                  
                 UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
                 UIApplication.shared.open(urlSchema)
-             }
-         }
+            }
+        }
     }
 
     func onShareToFBImageAsBackgroundClick() {
@@ -105,6 +105,19 @@ struct ContentView: View {
 
                 Button (action: onShareToFBImageAsBackgroundClick) {
                     Text("Share to Reels")
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.white)
+                        .padding()
+                }
+                .disabled(videoURL == nil)
+                .frame(maxWidth: .infinity, maxHeight: 40.0)
+                .background(videoURL == nil ? Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236, opacity: 0.5) : Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236))
+                .opacity(videoURL == nil ? 0.7 : 1)
+                .cornerRadius(10)
+                
+                
+                Button (action: onShareToFBImageAsStickerClick) {
+                    Text("Share to Reels with Sticker")
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
                         .padding()
