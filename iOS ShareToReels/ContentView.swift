@@ -22,11 +22,10 @@ struct ContentView: View {
 
     // Facebook
     func onShareToFBImageAsStickerClick() {
+        let stickerImage = UIImage(named: "Image")?.pngData();
+        let appID = "247047359503";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
-        let stickerImage = UIImage(named: "Image")?.pngData();
-        let appID = "YOUR_APP_ID";
-
         if let urlSchema = URL(string: "facebook-reels://share"){
             if UIApplication.shared.canOpenURL(urlSchema) {
                 let pasteboardItems = [
@@ -34,13 +33,12 @@ struct ContentView: View {
                     ["com.facebook.sharedSticker.stickerImage": stickerImage as Any],
                     ["com.facebook.sharedSticker.appID" : appID]
                 ];
-
                 let pasteboardOptions = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)];
-
+                 
                 UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
                 UIApplication.shared.open(urlSchema)
-            }
-        }
+             }
+         }
     }
 
     func onShareToFBImageAsBackgroundClick() {
