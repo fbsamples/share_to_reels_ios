@@ -23,7 +23,7 @@ struct ContentView: View {
     // Facebook
     func onShareToFBImageAsStickerClick() {
         let stickerImage = UIImage(named: "Image")?.pngData();
-        let appID = "YOUR_APP_ID";
+        let appID = "247047359503";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
@@ -42,7 +42,7 @@ struct ContentView: View {
     }
 
     func onShareToFBImageAsBackgroundClick() {
-        let appID = "YOUR_APP_ID";
+        let appID = "247047359503";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
@@ -103,30 +103,35 @@ struct ContentView: View {
                 .cornerRadius(10)
 
 
-                Button (action: onShareToFBImageAsBackgroundClick) {
-                    Text("Share to Reels")
-                        .fontWeight(.medium)
-                        .foregroundColor(Color.white)
-                        .padding()
+                HStack {
+                    Button (action: onShareToFBImageAsBackgroundClick) {
+                        Text("Share to Reels")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.white)
+                            .padding()
+                    }
+                    .disabled(videoURL == nil)
+                    .frame(maxWidth: .infinity, maxHeight: 40.0)
+                    .background(Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236))
+                    .opacity(videoURL == nil ? 0.7 : 1)
+                    .cornerRadius(10)
+                    
+                    
+                    Button (action: onShareToFBImageAsStickerClick) {
+                        Text("Share with Sticker")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.0196078431372549, green: 0.0196078431372549, blue: 0.0196078431372549))
+                            .padding()
+                            .opacity(videoURL == nil ? 0.7 : 1)
+                    }
+                    .disabled(videoURL == nil)
+                    .frame(maxWidth: .infinity, maxHeight: 40.0)
+                    .background( Color(red: 0.8941176470588236, green: 0.9019607843137255, blue: 0.9215686274509803))
+                    .opacity(videoURL == nil ? 0.7 : 1)
+                    .cornerRadius(10)
                 }
-                .disabled(videoURL == nil)
-                .frame(maxWidth: .infinity, maxHeight: 40.0)
-                .background(videoURL == nil ? Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236, opacity: 0.5) : Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236))
-                .opacity(videoURL == nil ? 0.7 : 1)
-                .cornerRadius(10)
-                
-                
-                Button (action: onShareToFBImageAsStickerClick) {
-                    Text("Share to Reels with Sticker")
-                        .fontWeight(.medium)
-                        .foregroundColor(Color.white)
-                        .padding()
-                }
-                .disabled(videoURL == nil)
-                .frame(maxWidth: .infinity, maxHeight: 40.0)
-                .background(videoURL == nil ? Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236, opacity: 0.5) : Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236))
-                .opacity(videoURL == nil ? 0.7 : 1)
-                .cornerRadius(10)
             }
             .padding(.horizontal, 20.0)
 
@@ -165,11 +170,12 @@ struct ContentView: View {
 
     func loadVideo()
     {
-        guard let urlString = videoURL, let url = URL(string: urlString) else {
+        if (videoURL == nil)
+        {
             player = nil
             return
         }
-
+        guard let url = URL(string: videoURL!) else { return }
         player = AVPlayer(url: url)
     }
 }
