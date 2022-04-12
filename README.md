@@ -2,7 +2,10 @@
 
 ## iOS Sample App
 
-This is an iOS Sample app with an integration to Facebook Share to Reels. Once you run the app, you will reach a screen where you can upload a video from your gallery and share to Reels in the Facebook App.
+This is an iOS Sample app with an integration to Facebook Share to Reels. Once you run the app, you will reach a screen where you can upload a video from your gallery. Then, you have two options to choose:
+
+- Share to reels
+- Share to reels with sticker
 
 ## Required software
 
