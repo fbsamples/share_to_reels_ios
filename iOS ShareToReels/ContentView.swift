@@ -23,7 +23,7 @@ struct ContentView: View {
     // Facebook
     func onShareToFBImageAsStickerClick() {
         let stickerImage = UIImage(named: "Image")?.pngData();
-        let appID = "247047359503";
+        let appID = "YOUR_APP_ID";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
@@ -42,7 +42,7 @@ struct ContentView: View {
     }
 
     func onShareToFBImageAsBackgroundClick() {
-        let appID = "247047359503";
+        let appID = "YOUR_APP_ID";
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
@@ -170,12 +170,10 @@ struct ContentView: View {
 
     func loadVideo()
     {
-        if (videoURL == nil)
-        {
+        guard let urlString = videoURL, let url = URL(string: urlString) else {
             player = nil
             return
         }
-        guard let url = URL(string: videoURL!) else { return }
         player = AVPlayer(url: url)
     }
 }
