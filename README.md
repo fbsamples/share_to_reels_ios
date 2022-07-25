@@ -44,5 +44,9 @@ You will need to fill in your app id in the `"YOUR_APP_ID"` strings.
 >   1. Unlock your phone and connect to your laptop using the cable. A message will  display on your phone:
 >   2. Trust apps from your Apple Development team. Open Setting :arrow_right: General :arrow_right: VPN & Device Management. Under "Developer App", select in the Item of the team account you just linked to the project.
 
+## Android Sample App
+
+If you want to see the Android integration, you can access [this project](https://github.com/fbsamples/share_to_reels_android).
+
 ## License
 Share to Reels iOS is Meta Platform Policy licensed, as found in the LICENSE file.
