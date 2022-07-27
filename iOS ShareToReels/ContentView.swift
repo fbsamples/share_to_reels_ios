@@ -20,8 +20,28 @@ struct ContentView: View {
     @State private var showingPicker = false
     @State private var player : AVPlayer?
 
-    // Facebook
-    func onShareToFBImageAsStickerClick() {
+    // Facebook Share to Reels
+    func onShareToFBReelsClick() {
+        let appID = "YOUR_APP_ID";
+        guard let url = URL(string: videoURL!) else { return }
+        let videoData = try? Data.init(contentsOf: url) as Data
+        if let urlSchema = URL(string: "facebook-reels://share"){
+            if UIApplication.shared.canOpenURL(urlSchema) {
+                let pasteboardItems = [
+                    ["com.facebook.sharedSticker.backgroundVideo": videoData as Any],
+                    ["com.facebook.sharedSticker.appID" : appID]
+                ];
+
+                let pasteboardOptions = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)];
+
+                UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
+                UIApplication.shared.open(urlSchema)
+            }
+        }
+    }
+
+    // Facebook Share to Reels with Sticker
+    func onShareToFBReelsWithStickerClick() {
         let stickerImage = UIImage(named: "Image")?.pngData();
         let appID = "YOUR_APP_ID";
         guard let url = URL(string: videoURL!) else { return }
@@ -40,26 +60,6 @@ struct ContentView: View {
             }
         }
     }
-
-    func onShareToFBImageAsBackgroundClick() {
-        let appID = "YOUR_APP_ID";
-        guard let url = URL(string: videoURL!) else { return }
-        let videoData = try? Data.init(contentsOf: url) as Data
-        if let urlSchema = URL(string: "facebook-reels://share"){
-            if UIApplication.shared.canOpenURL(urlSchema) {
-                let pasteboardItems = [
-                    ["com.facebook.sharedSticker.backgroundVideo": videoData as Any],
-                    ["com.facebook.sharedSticker.appID" : appID]
-                ];
-
-                let pasteboardOptions = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)];
-
-                UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
-                UIApplication.shared.open(urlSchema)
-            }
-        }
-    }
-
     var body: some View {
         VStack {
             Text("Share to Reels")
@@ -104,7 +104,7 @@ struct ContentView: View {
 
 
                 HStack {
-                    Button (action: onShareToFBImageAsBackgroundClick) {
+                    Button (action: onShareToFBReelsClick) {
                         Text("Share to Reels")
                             .font(.caption)
                             .fontWeight(.semibold)
@@ -118,7 +118,7 @@ struct ContentView: View {
                     .cornerRadius(10)
                     
                     
-                    Button (action: onShareToFBImageAsStickerClick) {
+                    Button (action: onShareToFBReelsWithStickerClick) {
                         Text("Share with Sticker")
                             .font(.caption)
                             .fontWeight(.semibold)
@@ -134,8 +134,6 @@ struct ContentView: View {
                 }
             }
             .padding(.horizontal, 20.0)
-
-
 
             // Footer
             VStack{
