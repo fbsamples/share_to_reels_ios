@@ -2,10 +2,12 @@
 
 ## iOS Sample App
 
-This is an iOS Sample app with an integration to Facebook Share to Reels. Once you run the app, you will reach a screen where you can upload a video from your gallery. Then, you have two options to choose:
+This is an iOS Sample app with integrations to Facebook and Instagram Share to Reels. Once you run the app, you will reach a screen where you can upload a video from your gallery. Then, you have four options to choose:
 
-- Share to reels
-- Share to reels with sticker
+- Share to Facebook Reels
+- Share to Facebook Reels with a sticker
+- Share to Instagram Reels
+- Share to Instagram Reels with a sticker
 
 ## Required software
 
@@ -13,14 +15,14 @@ In order to run the sample app you will need to install some required software, 
 
 - XCode
 
-## Add your app id
+## Add your App ID
 
-In order to run the app, you will need to update the code and add your Facebook Developer App Id. If you don't have an app, check out this [link](https://developers.facebook.com/docs/development/).
+In order to run the app, you will need to update the code and add your Facebook Developer App ID. If you don't have an app, check out this [link](https://developers.facebook.com/docs/development/).
 
 Update the following files:
 - `iOS ShareToReels/ContentView.swift`
 
-You will need to fill in your app id in the `"YOUR_APP_ID"` strings.
+You will need to fill in your App ID in the `"YOUR_APP_ID"` string.
 
 ## Running the project
 
