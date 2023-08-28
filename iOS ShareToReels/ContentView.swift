@@ -20,17 +20,27 @@ struct ContentView: View {
     @State private var showingPicker = false
     @State private var player : AVPlayer?
 
+    private let bgPrimary = Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236)
+    private let bgSecondary = Color(red: 0.9058823529411765, green: 0.9529411764705882, blue: 1.0)
+    private var bgTertiary = Color(red: 0.8941176470588236, green: 0.9019607843137255, blue: 0.9215686274509803)
+
+    private let appID = "YOUR_APP_ID"
+
     // Facebook Share to Reels
-    func onShareToFBReelsClick() {
-        let appID = "YOUR_APP_ID";
+    func onShareToFBReelsClick(includeSticker: Bool = false) {
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
         if let urlSchema = URL(string: "facebook-reels://share"){
             if UIApplication.shared.canOpenURL(urlSchema) {
-                let pasteboardItems = [
+                var pasteboardItems = [
                     ["com.facebook.sharedSticker.backgroundVideo": videoData as Any],
                     ["com.facebook.sharedSticker.appID" : appID]
                 ];
+
+                if (includeSticker) {
+                    let stickerImage = UIImage(named: "Image")?.pngData();
+                    pasteboardItems.append(["com.facebook.sharedSticker.stickerImage": stickerImage as Any]);
+                }
 
                 let pasteboardOptions = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)];
 
@@ -40,26 +50,30 @@ struct ContentView: View {
         }
     }
 
-    // Facebook Share to Reels with Sticker
-    func onShareToFBReelsWithStickerClick() {
-        let stickerImage = UIImage(named: "Image")?.pngData();
-        let appID = "YOUR_APP_ID";
+    // Instagram Share to Reels
+    func onShareToIGReelsClick(includeSticker: Bool = false) {
         guard let url = URL(string: videoURL!) else { return }
         let videoData = try? Data.init(contentsOf: url) as Data
-        if let urlSchema = URL(string: "facebook-reels://share"){
+        if let urlSchema = URL(string: "instagram-reels://share"){
             if UIApplication.shared.canOpenURL(urlSchema) {
-                let pasteboardItems = [
-                    ["com.facebook.sharedSticker.backgroundVideo": videoData as Any],
-                    ["com.facebook.sharedSticker.stickerImage": stickerImage as Any],
-                    ["com.facebook.sharedSticker.appID" : appID]
+                var pasteboardItems = [
+                    ["com.instagram.sharedSticker.backgroundVideo": videoData as Any],
+                    ["com.instagram.sharedSticker.appID" : appID]
                 ];
+
+                if (includeSticker) {
+                    let stickerImage = UIImage(named: "Image")?.pngData();
+                    pasteboardItems.append(["com.instagram.sharedSticker.stickerImage": stickerImage as Any]);
+                }
+
                 let pasteboardOptions = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)];
-                 
+
                 UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
                 UIApplication.shared.open(urlSchema)
             }
         }
     }
+
     var body: some View {
         VStack {
             Text("Share to Reels")
@@ -69,7 +83,7 @@ struct ContentView: View {
                 .padding([.top, .leading], 20.0)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text("Now you can share a video from your app directly to Facebook Reels")
+            Text("Now you can share a video from your app directly to Facebook or Instagram Reels!")
                 .font(.body)
                 .multilineTextAlignment(.leading)
                 .padding([.leading], 20.0)
@@ -79,15 +93,15 @@ struct ContentView: View {
             // Player
             VStack {
                 VideoPlayer(player: player)
-                .onAppear() {
-                }
-                .onDisappear() {
-                    // Stop the player when the view disappears
-                    player?.pause()
-                }
-                .disabled(videoURL == nil)
-                .edgesIgnoringSafeArea(.all)
-                .frame(height: UIScreen.main.bounds.width)
+                    .onAppear() {
+                    }
+                    .onDisappear() {
+                        // Stop the player when the view disappears
+                        player?.pause()
+                    }
+                    .disabled(videoURL == nil)
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(height: UIScreen.main.bounds.width)
             }
             .frame(height: UIScreen.main.bounds.width)
             .padding(.all, 20.0)
@@ -99,65 +113,80 @@ struct ContentView: View {
                 }
                 .padding(15.0)
                 .frame(maxWidth: .infinity, maxHeight: 40.0)
-                .background(Color(red: 0.9058823529411765, green: 0.9529411764705882, blue: 1.0))
+                .background(bgSecondary)
                 .cornerRadius(10)
 
+                VStack {
+                    Text("Facebook Reels")
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                HStack {
-                    Button (action: onShareToFBReelsClick) {
-                        Text("Share to Reels")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.white)
-                            .padding()
+                    HStack {
+                        Button (action: {onShareToFBReelsClick(includeSticker: false)}) {
+                            Text("Share to Reels")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.white)
+                                .padding()
+                        }
+                        .disabled(videoURL == nil)
+                        .frame(maxWidth: .infinity, maxHeight: 40.0)
+                        .background(bgPrimary)
+                        .opacity(videoURL == nil ? 0.7 : 1)
+                        .cornerRadius(10)
+
+                        Button (action: {onShareToFBReelsClick(includeSticker: true)}) {
+                            Text("Share with Sticker")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.primary)
+                                .padding()
+                                .opacity(videoURL == nil ? 0.7 : 1)
+                        }
+                        .disabled(videoURL == nil)
+                        .frame(maxWidth: .infinity, maxHeight: 40.0)
+                        .background(bgTertiary)
+                        .opacity(videoURL == nil ? 0.7 : 1)
+                        .cornerRadius(10)
                     }
-                    .disabled(videoURL == nil)
-                    .frame(maxWidth: .infinity, maxHeight: 40.0)
-                    .background(Color(red: 0.10588235294117647, green: 0.4549019607843137, blue: 0.8941176470588236))
-                    .opacity(videoURL == nil ? 0.7 : 1)
-                    .cornerRadius(10)
-                    
-                    
-                    Button (action: onShareToFBReelsWithStickerClick) {
-                        Text("Share with Sticker")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.0196078431372549, green: 0.0196078431372549, blue: 0.0196078431372549))
-                            .padding()
-                            .opacity(videoURL == nil ? 0.7 : 1)
+                }
+
+                Divider()
+
+                VStack {
+                    Text("Instagram Reels")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack {
+                        Button (action: {onShareToIGReelsClick(includeSticker: false)}) {
+                            Text("Share to Reels")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.white)
+                                .padding()
+                        }
+                        .disabled(videoURL == nil)
+                        .frame(maxWidth: .infinity, maxHeight: 40.0)
+                        .background(bgPrimary)
+                        .opacity(videoURL == nil ? 0.7 : 1)
+                        .cornerRadius(10)
+
+                        Button (action: {onShareToIGReelsClick(includeSticker: true)}) {
+                            Text("Share with Sticker")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.primary)
+                                .padding()
+                                .opacity(videoURL == nil ? 0.7 : 1)
+                        }
+                        .disabled(videoURL == nil)
+                        .frame(maxWidth: .infinity, maxHeight: 40.0)
+                        .background(bgTertiary)
+                        .opacity(videoURL == nil ? 0.7 : 1)
+                        .cornerRadius(10)
                     }
-                    .disabled(videoURL == nil)
-                    .frame(maxWidth: .infinity, maxHeight: 40.0)
-                    .background( Color(red: 0.8941176470588236, green: 0.9019607843137255, blue: 0.9215686274509803))
-                    .opacity(videoURL == nil ? 0.7 : 1)
-                    .cornerRadius(10)
                 }
             }
             .padding(.horizontal, 20.0)
-
-            // Footer
-            VStack{
-                VStack{
-                    Text("Sharing to Facebook Reels")
-                        .font(.footnote)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Text("Upload a video and choose one of the options to share it on Facebook Reels!")
-                        .font(.footnote)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(.all, 15.0)
-                .background(Color(red: 0.9686274509803922, green: 0.9725490196078431, blue: 0.9803921568627451))
-                .cornerRadius(10)
-            }
-            .padding(.horizontal, 20.0)
-            .padding(.vertical, 10.0)
-
-
         }
         .sheet(isPresented: $showingPicker) {
             Picker(videoURL: $videoURL)

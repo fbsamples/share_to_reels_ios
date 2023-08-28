@@ -21,6 +21,7 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>facebook-reels</string>
+		<string>instagram-reels</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
