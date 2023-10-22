@@ -189,7 +189,7 @@ struct ContentView: View {
             .padding(.horizontal, 20.0)
         }
         .sheet(isPresented: $showingPicker) {
-            Picker(videoURL: $videoURL)
+            Picker(videoURL: $videoURL).ignoresSafeArea()
         }
         .onChange(of: videoURL) { _ in loadVideo() }
         .padding(.top, 10.0)
